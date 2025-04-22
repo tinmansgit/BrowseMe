@@ -1,4 +1,4 @@
-# BrowseMe v1.3 (Refactored) - 20250420.09:30 - added support for new window/tab requests when clicking links
+# BrowseMe v1.3 20250420.09:30
 import sys
 import os
 import argparse
