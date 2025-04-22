@@ -113,7 +113,7 @@ class MainWindow(QMainWindow):
         self._init_ui(url or DEFAULT_HOME_URL)
 
     def _set_window_icon(self):
-        icon_path = "/home/coder/bin/Python/BrowseMe/browse-me_icon.png"
+        icon_path = "/home/user/bin/Python/BrowseMe/browse-me_icon.png"
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         else:
