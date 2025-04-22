@@ -1,4 +1,4 @@
-# BrowseMe v1.3 20250420.09:30
+# BrowseMe v1.3 20250422.09:32
 import sys
 import os
 import argparse
@@ -75,11 +75,12 @@ class CloseableTab(QWidget):
         self.layout = QHBoxLayout()
         self.label = QLabel(title)
         self.close_button = QPushButton("X")
+        self.close_button.setStyleSheet("padding: 3px; margin-top: 10px; margin-right: 20px; margin-bottom: 5px;")
 
         self.close_button.clicked.connect(close_callback)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.close_button)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
     
     def update_title(self, title):
@@ -89,15 +90,15 @@ class MainWindow(QMainWindow):
     def __init__(self, url=None):
         super(MainWindow, self).__init__()
         log_debug("MainWindow initialized")
-        self.setWindowIcon(QIcon("/bin/Python/BrowseMe/browse-me_icon.png"))
+        self.setWindowIcon(QIcon("/home/coder/bin/Python/BrowseMe/browse-me_icon.png"))
         
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
-        self.tabs.tabBar().setStyleSheet("QTabBar::tab {margin: 0px; padding: 3px;}")
+        self.tabs.tabBar().setStyleSheet("QTabBar::tab {border: 0px; margin-left: 5px; margin-top:3px; margin-right:5px; padding-left:10px;}")
 
         self.add_new_tab(url or DEFAULT_HOME_URL)
         self.setup_navbar()
-        self.setStyleSheet("background-color: #353535; color: white")
+        self.setStyleSheet("background-color: #353535; color: white;")
         self.resize(1250, 850)
         self.show()
     
@@ -299,3 +300,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
