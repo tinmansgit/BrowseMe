@@ -75,7 +75,7 @@ class CloseableTab(QWidget):
         self.layout = QHBoxLayout()
         self.label = QLabel(title)
         self.close_button = QPushButton("X")
-        self.close_button.setStyleSheet("padding: 3px; margin-top: 10px; margin-right: 20px; margin-bottom: 5px;")
+        self.close_button.setStyleSheet("padding: 3px; margin-top: 10px; margin-right: 5px; margin-bottom: 5px;")
 
         self.close_button.clicked.connect(close_callback)
         self.layout.addWidget(self.label)
