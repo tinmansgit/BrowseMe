@@ -1,32 +1,16 @@
-# BrowseMe v2.0 20250422.11:40
+# BrowseMe v2.1 20250428.12:11
 import sys
 import os
 import argparse
 from PyQt5.QtCore import QUrl, pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QTabWidget,
-    QTabBar,
-    QFileDialog,
-    QToolBar,
-    QLineEdit,
-    QAction,
-    QMessageBox,
-)
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTabWidget, QTabBar, QFileDialog, QToolBar, QLineEdit, QAction, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineSettings
 import logger_browseme
 from logger_browseme import log_error, log_debug
 
 DEFAULT_HOME_URL = 'https://www.duckduckgo.com'
-USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0)" "Gecko/20100101" "Firefox/103.0")
-
+USER_AGENT = ("Mozilla/5.0 (SMART-TV; Linux; Tizen 5.0) " "AppleWebKit/537.36 (KHTML, like Gecko) " "SamsungBrowser/2.2 Chrome/63.0.3239.84 TV Safari/537.36")
 class HttpsWebEnginePage(QWebEnginePage):
     def __init__(self, main_window=None, parent=None):
         super().__init__(parent)
@@ -113,7 +97,7 @@ class MainWindow(QMainWindow):
         self._init_ui(url or DEFAULT_HOME_URL)
 
     def _set_window_icon(self):
-        icon_path = "/home/user/bin/Python/BrowseMe/browse-me_icon.png"
+        icon_path = "~/bin/Python/BrowseMe/browse-me_icon.png"
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         else:
@@ -172,23 +156,21 @@ class MainWindow(QMainWindow):
             log_debug("Opened a new window.")
         except Exception as e:
             log_error("Error opening a new window: " + str(e))
-            QMessageBox.critical(self, "New Window Error", "Failed to open new window: " + str(e))
+            QMessageBox.critical(self, "New Window Error","Failed to open new window: " + str(e))
 
     def open_file(self):
         try:
-            file_name, _ = QFileDialog.getOpenFileName(
-                self, "Open HTML File", "", "HTML Files (*.html *.htm);;All Files (*)"
-            )
+            file_name, _ = QFileDialog.getOpenFileName(self, "Open HTML File", "", "HTML Files (*.html *.htm);;All Files (*)")
             if file_name:
                 if not file_name.lower().endswith(('.html', '.htm')):
-                    QMessageBox.warning(self, "Invalid File", "Please select a valid HTML file.")
+                    QMessageBox.warning(self, "Invalid File","Please select a valid HTML file.")
                     return
                 file_url = QUrl.fromLocalFile(os.path.abspath(file_name)).toString()
                 log_debug("Opening local file: " + file_url)
                 self.add_new_tab(file_url)
         except Exception as e:
             log_error("Error opening file: " + str(e))
-            QMessageBox.critical(self, "File Open Error", "Failed to open file: " + str(e))
+            QMessageBox.critical(self, "File Open Error","Failed to open file: " + str(e))
 
     def reload_current_tab(self):
         browser = self.current_browser()
@@ -237,9 +219,28 @@ class MainWindow(QMainWindow):
             self.url_bar.setText(new_url)
             log_debug("URL updated to: " + new_url)
 
+    def cleanup_tab_resources(self, tab):
+        try:
+            browser = tab.browser
+            try:
+                browser.page().titleChanged.disconnect()
+                browser.page().urlChanged.disconnect()
+            except Exception:
+                pass
+
+            browser.setParent(None)
+            browser.page().deleteLater()
+            browser.deleteLater()
+
+            tab.deleteLater()
+            log_debug("Cleaned up resources for the closed tab.")
+        except Exception as e:
+            log_error("Error during cleaning up tab resources: " + str(e))
+
     def close_tab(self, tab):
         index = self.tabs.indexOf(tab)
         if index != -1:
+            self.cleanup_tab_resources(tab)
             self.tabs.removeTab(index)
             log_debug(f"Closed tab at index: {index}")
             self.update_url_bar()
@@ -258,7 +259,7 @@ class MainWindow(QMainWindow):
                 log_debug("Navigated to home page")
         except Exception as e:
             log_error("Error navigating to home page: " + str(e))
-            QMessageBox.critical(self, "Navigation Error", "Failed to navigate to home page: " + str(e))
+            QMessageBox.critical(self, "Navigation Error","Failed to navigate to home page: " + str(e))
 
     def navigate_to_url(self):
         try:
@@ -271,7 +272,7 @@ class MainWindow(QMainWindow):
                 log_debug("Navigated to URL: " + url_text)
         except Exception as e:
             log_error("Error navigating to URL: " + str(e))
-            QMessageBox.critical(self, "Navigation Error", "Failed to navigate to the URL: " + str(e))
+            QMessageBox.critical(self, "Navigation Error","Failed to navigate to the URL: " + str(e))
 
     def update_url_bar(self):
         try:
