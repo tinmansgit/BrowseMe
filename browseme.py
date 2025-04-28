@@ -10,7 +10,8 @@ import logger_browseme
 from logger_browseme import log_error, log_debug
 
 DEFAULT_HOME_URL = 'https://www.duckduckgo.com'
-USER_AGENT = ("Mozilla/5.0 (SMART-TV; Linux; Tizen 5.0) " "AppleWebKit/537.36 (KHTML, like Gecko) " "SamsungBrowser/2.2 Chrome/63.0.3239.84 TV Safari/537.36")
+USER_AGENT = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0)" "Gecko/20100101" "Firefox/103.0")
+
 class HttpsWebEnginePage(QWebEnginePage):
     def __init__(self, main_window=None, parent=None):
         super().__init__(parent)
