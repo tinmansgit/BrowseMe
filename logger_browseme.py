@@ -1,8 +1,11 @@
 # My custom logging library v1.1
 import logging
+from datetime import datetime
 
-error_log_file = '/bin/Python/BrowseMe/log_browseme_error.log'
-debug_log_file = '/bin/Python/BrowseMe/log_browseme_debug.log'
+current_date = datetime.now().strftime('%Y-%m-%d')
+error_log_file = f'~/bin/Python/BrowseMe/log_error_browseme_{current_date}.log'
+debug_log_file = f'~/bin/Python/BrowseMe/log_debug_browseme_{current_date}.log'
+
 
 logger = logging.getLogger('app_logger')
 logger.setLevel(logging.DEBUG)
